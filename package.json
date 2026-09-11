@@ -6,7 +6,8 @@
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --mac",
-    "pack:dmg": "electron-builder --mac dmg"
+    "pack:dmg": "electron-builder --mac dmg",
+    "pack:pkg": "electron-builder --mac pkg"
   },
   "author": "Kinson Studio",
   "license": "ISC",
@@ -23,17 +24,13 @@
     "productName": "Kinson Studio",
     "mac": {
       "category": "public.app-category.utilities",
-      "target": ["dmg"],
+      "target": ["pkg"],
       "icon": "resources/icon.icns",
       "hardenedRuntime": false,
       "gatekeeperAssess": false
     },
-    "dmg": {
-      "title": "Kinson Studio",
-      "contents": [
-        { "x": 130, "y": 220 },
-        { "x": 410, "y": 220, "type": "link", "path": "/Applications" }
-      ]
+    "pkg": {
+      "installLocation": "/Applications"
     },
     "extraResources": [
       { "from": "resources/bin", "to": "bin" }
