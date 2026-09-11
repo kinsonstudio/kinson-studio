@@ -1,0 +1,49 @@
+{
+  "name": "kinson-studio",
+  "version": "1.0.0",
+  "description": "Kinson Studio 全能格式转换器",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --mac",
+    "pack:dmg": "electron-builder --mac dmg"
+  },
+  "author": "Kinson Studio",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^44.3.0",
+    "electron-builder": "^26.15.3"
+  },
+  "dependencies": {
+    "archiver": "^7.0.1"
+  },
+  "build": {
+    "appId": "com.kinsonstudio.converter",
+    "productName": "Kinson Studio",
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": ["dmg"],
+      "icon": "resources/icon.icns",
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false
+    },
+    "dmg": {
+      "title": "Kinson Studio",
+      "contents": [
+        { "x": 130, "y": 220 },
+        { "x": 410, "y": 220, "type": "link", "path": "/Applications" }
+      ]
+    },
+    "extraResources": [
+      { "from": "resources/bin", "to": "bin" }
+    ],
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "decrypter.js",
+      "node_modules/**/*"
+    ]
+  }
+}

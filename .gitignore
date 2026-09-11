@@ -1,0 +1,6 @@
+node_modules/
+dist-dmg/
+dist/
+*.log
+.DS_Store
+resources/bin/LibreOffice.app/
