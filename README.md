@@ -1,4 +1,4 @@
-```
+
 <div align="center">
 
 <img src="https://raw.githubusercontent.com/kinsonstudio/kinson-studio/main/icon.png" alt="Kinson Studio" width="120" style="border-radius: 24px;">
