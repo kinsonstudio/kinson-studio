@@ -24,7 +24,7 @@ Kinson Studio 是一款面向普通用户的**一站式文件处理工具**，�
 
 > 永久免费 · 开源透明 · 无广告 · 无水印 · 不限次数
 
-**官方网站：** [https://taiai.asia/kinsonstudio.html](https://taiai.asia/kinsonstudio.html)
+**官方网站：** [https://taiai.asia/kinson.html](https://taiai.asia/kinson.html)
 
 ---
 
