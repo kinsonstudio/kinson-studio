@@ -10,8 +10,8 @@ contextBridge.exposeInMainWorld('api', {
   ocr: (input, outDir) => ipcRenderer.invoke('ocr', input, outDir),
   zipPack: (files, output) => ipcRenderer.invoke('zip-pack', files, output),
   unzip: (zip, outDir) => ipcRenderer.invoke('unzip', zip, outDir),
-  checkOffice: () => ipcRenderer.invoke('check-office'),
-  downloadOffice: () => ipcRenderer.invoke('download-office'),
+  checkOffice: (outDir) => ipcRenderer.invoke('check-office', outDir),
+  downloadOffice: (outDir) => ipcRenderer.invoke('download-office', outDir),
   onLog: (cb) => ipcRenderer.on('log', (e, msg) => cb(msg)),
   onDownloadProgress: (cb) => ipcRenderer.on('download-progress', (e, data) => cb(data))
 })
