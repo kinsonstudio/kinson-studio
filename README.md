@@ -10,9 +10,9 @@
 [![Version](https://img.shields.io/badge/version-0.0.1-blue.svg)](https://github.com/kinsonstudio/kinson-studio/releases)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-macOS-lightgrey.svg)](#)
-[![Website](https://img.shields.io/badge/官网-taiai.asia-FF6B6B.svg)](https://taiai.asia/kinsonstudio.html)
+[![Website](https://img.shields.io/badge/官网-taiai.asia-FF6B6B.svg)](https://taiai.asia/kinson.html)
 
-[🌐 官网](https://taiai.asia/kinsonstudio.html) · [📦 下载](https://github.com/kinsonstudio/kinson-studio/releases) · [✨ 功能](#-功能特性) · [📸 截图](#-截图展示) · [🛠️ 开发](#-本地开发) · [👤 作者](#-作者)
+[🌐 官网](https://taiai.asia/kinson.html) · [📦 下载](https://taiai.asia/kinsonstudio.html) · [✨ 功能](#-功能特性) · [📸 截图](#-截图展示) · [🛠️ 开发](#-本地开发) · [👤 作者](#-作者)
 
 </div>
 
@@ -25,6 +25,8 @@ Kinson Studio 是一款面向普通用户的**一站式文件处理工具**，�
 > 永久免费 · 开源透明 · 无广告 · 无水印 · 不限次数
 
 **官方网站：** [https://taiai.asia/kinson.html](https://taiai.asia/kinson.html)
+
+**下载页面：** [https://taiai.asia/kinsonstudio.html](https://taiai.asia/kinsonstudio.html)
 
 ---
 
@@ -66,7 +68,7 @@ ZIP 格式压缩与解压，支持**批量压缩**、**批量解压**，操作�
 ## 🚀 下载安装
 
 ### macOS
-1. 前往 [官网下载页](https://taiai.asia/kinsonstudio.html) 或 [GitHub Releases](https://github.com/kinsonstudio/kinson-studio/releases) 下载最新版 `.pkg` 安装包
+1. 前往 [下载页面](https://taiai.asia/kinsonstudio.html) 或 [GitHub Releases](https://github.com/kinsonstudio/kinson-studio/releases) 下载最新版 `.pkg` 安装包
 2. 双击打开，按安装向导操作
 3. 如提示"无法验证开发者"，右键点击安装包 → 打开 → 仍要安装
 
@@ -103,7 +105,7 @@ npm run pack:mac
 
 [![GitHub](https://img.shields.io/badge/GitHub-kinsonstudio-181717?style=for-the-badge&logo=github)](https://github.com/kinsonstudio)
 [![Email](https://img.shields.io/badge/Email-kinsonstudio%40icloud.com-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:kinsonstudio@icloud.com)
-[![Website](https://img.shields.io/badge/Website-taiai.asia-FF6B6B?style=for-the-badge&logo=googlechrome&logoColor=white)](https://taiai.asia/kinsonstudio.html)
+[![Website](https://img.shields.io/badge/Website-taiai.asia-FF6B6B?style=for-the-badge&logo=googlechrome&logoColor=white)](https://taiai.asia/kinson.html)
 
 专注于开发简单易用的桌面工具，相信好的软件应该让每个人都能免费用上。
 
@@ -134,5 +136,5 @@ npm run pack:mac
 
 **Made with ❤️ by Kinson Studio**
 
-**官网：[https://taiai.asia/kinsonstudio.html](https://taiai.asia/kinsonstudio.html)**
+**官网：[https://taiai.asia/kinson.html](https://taiai.asia/kinson.html)**
 
