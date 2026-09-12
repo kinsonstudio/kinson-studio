@@ -15,7 +15,7 @@
 
 ## 🚀 下载安装
 
-前往 [Releases](https://github.com/kinsonstudio/kinson-studio/releases) 页面下载最新版 DMG。
+前往 [Releases](https://github.com/kinsonstudio/kinson-studio/releases) 页面下载最新版 pkg。
 
 ## 🛠️ 本地开发
 
