@@ -8,169 +8,95 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Quicksand', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-      background: #fefaf6; color: #5c4f47;
+      background: #fefaf6;
+      color: #5c4f47;
       display: flex; flex-direction: column; height: 100vh; overflow: hidden; line-height: 1.45;
     }
     .header {
       background: #ffffffec; backdrop-filter: blur(4px);
-      padding: 12px 26px; display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 26px; display: flex; align-items: center; justify-content: space-between;
       border-bottom: 2px solid #f5e3d8; box-shadow: 0 4px 12px rgba(220,190,170,0.15);
       flex-shrink: 0; border-radius: 0 0 24px 24px; margin: 0 6px;
     }
-    .header-left { display: flex; align-items: center; gap: 12px; }
     .header h1 { font-size: 20px; font-weight: 700; color: #b1856b; display: flex; align-items: center; gap: 6px; }
     .header h1::before { content: "🎧"; font-size: 24px; margin-right: 4px; }
-    .header .badge { font-size: 11px; background: #fdf0e7; color: #b1856b; padding: 4px 14px; border-radius: 30px; font-weight: 600; border: 1px solid #f3d9c9; }
     .header-right { display: flex; align-items: center; gap: 10px; }
-    .office-status {
-      display: flex; align-items: center; gap: 6px; padding: 5px 14px; border-radius: 20px;
-      font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.15s;
-    }
-    .office-status.ready { background: #edf9f0; color: #5a8a6a; border: 1px solid #c8e6d0; }
-    .office-status.not-ready { background: #fff0f0; color: #a05a5a; border: 1px solid #f0d0d0; }
-    .office-status.downloading { background: #fef0e7; color: #b1856b; border: 1px solid #f3d9c9; }
-    .office-status .arrow { font-size: 9px; transition: transform 0.2s; }
-    .office-status.expanded .arrow { transform: rotate(180deg); }
-    .support-btn {
-      padding: 6px 16px; border: 1.5px solid #f0dfd2; border-radius: 24px;
-      background: #fff; font-size: 11px; font-weight: 600; color: #b1856b;
-      cursor: pointer; transition: all 0.15s; font-family: inherit;
-    }
-    .support-btn:hover { background: #fdf0e7; border-color: #dbb99b; }
-    /* 下载进度面板 */
-    .download-panel {
-      background: #fffdfb; border-bottom: 2px solid #f5e3d8; padding: 0 26px;
-      max-height: 0; overflow: hidden; transition: max-height 0.3s ease, padding 0.3s ease;
-    }
-    .download-panel.show { max-height: 120px; padding: 14px 26px; }
-    .download-panel-inner {
-      background: #fef7f2; border: 1.5px solid #f3d9c9; border-radius: 18px; padding: 12px 18px;
-    }
-    .download-panel-title { font-size: 12px; font-weight: 700; color: #b1856b; margin-bottom: 8px; display: flex; justify-content: space-between; }
-    .progress-bar { width: 100%; height: 12px; background: #f0dfd2; border-radius: 10px; overflow: hidden; }
-    .progress-fill { height: 100%; background: linear-gradient(90deg, #dbb99b, #cdaa8a); border-radius: 10px; transition: width 0.3s ease; width: 0%; }
-    .download-info { display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; color: #9e7f6c; font-weight: 600; }
-    .main { display: flex; flex: 1; overflow: hidden; padding: 16px 20px 8px 20px; gap: 16px; }
-    .left-panel { flex: 1; display: flex; flex-direction: column; min-width: 0; position: relative; }
+    .badge { font-size: 12px; background: #fdf0e7; color: #b1856b; padding: 5px 16px; border-radius: 30px; font-weight: 600; border: 1px solid #f3d9c9; }
+    .office-status { font-size: 12px; padding: 5px 14px; border-radius: 30px; font-weight: 600; cursor: pointer; border: 1px solid; }
+    .office-status.ready { background: #e8f5e9; color: #4caf50; border-color: #c8e6c9; }
+    .office-status.not-ready { background: #fff3e0; color: #ff9800; border-color: #ffe0b2; }
+    .office-status.downloading { background: #e3f2fd; color: #2196f3; border-color: #bbdefb; }
+    .support-btn { font-size: 12px; background: #fdf0e7; color: #b1856b; padding: 5px 14px; border-radius: 30px; font-weight: 600; border: 1px solid #f3d9c9; cursor: pointer; font-family: inherit; }
+    .support-btn:hover { background: #fae8dc; }
+    .main { display: flex; flex: 1; overflow: hidden; padding: 20px 20px 8px; gap: 16px; }
     .drop-zone {
       flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 36px 28px; border: 2.5px dashed #e6d5c8; border-radius: 42px;
-      background: #fffdfb; transition: all 0.2s ease; cursor: pointer;
-      box-shadow: 0 12px 26px #f4e5da, inset 0 1px 8px #ffffff;
+      padding: 36px 28px; border: 2.5px dashed #e6d5c8; border-radius: 42px; background: #fffdfb;
+      transition: all 0.2s; cursor: pointer; min-width: 0; box-shadow: 0 12px 26px #f4e5da;
+      position: relative; overflow: hidden;
     }
     .drop-zone.dragover { border-color: #dbb99b; background: #fff9f3; transform: scale(1.005); }
     .drop-zone .icon { font-size: 58px; margin-bottom: 16px; opacity: 0.85; }
-    .drop-zone .text { font-size: 17px; color: #9e8778; font-weight: 500; background: #fef8f2; padding: 8px 24px; border-radius: 40px; }
+    .drop-zone .text { font-size: 17px; color: #9e8778; text-align: center; font-weight: 500; background: #fef8f2; padding: 8px 24px; border-radius: 40px; }
     .drop-zone .hint { font-size: 13px; color: #c3afa2; margin-top: 12px; background: #fef7f0; padding: 5px 18px; border-radius: 30px; }
-    .preview-wrap {
-      flex: 1; position: relative; display: none; align-items: center; justify-content: center;
-      border-radius: 32px; overflow: hidden; background: #fff;
-      box-shadow: 0 12px 28px #ecd9c9; border: 2px solid #f5e3d8;
-    }
-    .preview-wrap.show { display: flex; }
-    .preview-image { max-width: 100%; max-height: 100%; object-fit: contain; display: block; user-select: none; -webkit-user-drag: none; pointer-events: none; }
-    .ocr-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; user-select: text; cursor: text; display: none; }
-    .ocr-layer.show { display: block; }
-    .ocr-word { position: absolute; cursor: text; user-select: text; background: transparent; color: transparent; line-height: 1; white-space: nowrap; overflow: hidden; }
-    .ocr-word::selection { background: rgba(0, 122, 255, 0.35); color: transparent; }
-    .ocr-loading-mask {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(255,253,251,0.85); display: none;
-      align-items: center; justify-content: center; flex-direction: column;
-      backdrop-filter: blur(2px); z-index: 10;
-    }
-    .ocr-loading-mask.show { display: flex; }
-    .ocr-loading-mask .spinner { width: 36px; height: 36px; border: 3px solid #f0dfd2; border-top-color: #dbb99b; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 12px; }
-    .ocr-loading-mask span { font-size: 15px; color: #b1856b; font-weight: 600; }
+    .preview-wrap { position: relative; width: 100%; max-height: 100%; display: flex; align-items: center; justify-content: center; }
+    .preview-img { max-width: 100%; max-height: 500px; border-radius: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+    .ocr-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+    .ocr-word { position: absolute; cursor: text; color: transparent; user-select: text; }
+    .ocr-word::selection { background: rgba(59,130,246,0.4); }
+    .ocr-loading { position: absolute; inset: 0; background: rgba(255,255,255,0.85); display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 20px; backdrop-filter: blur(4px); }
+    .ocr-loading .spinner { width: 40px; height: 40px; border: 4px solid #f0dfd2; border-top-color: #dbb99b; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 12px; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .file-list { max-height: 80px; overflow-y: auto; margin-top: 10px; padding: 0 4px; }
-    .file-card { background: #fffbf8; border: 1.5px solid #f0dfd2; border-radius: 18px; padding: 8px 16px; margin-bottom: 6px; display: flex; align-items: center; justify-content: space-between; font-size: 12px; box-shadow: 0 2px 6px #f6e8dd; }
-    .file-card .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 250px; color: #6b5b50; font-weight: 500; }
-    .file-card .remove { color: #d49b7a; cursor: pointer; font-size: 18px; background: #fff2e9; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
-    .sidebar {
-      width: 380px; background: #ffffffec; backdrop-filter: blur(2px);
-      border-left: 2px solid #f5e3d8; border-radius: 32px 0 0 32px;
-      display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0;
-      box-shadow: -4px 0 18px #f2e1d4; padding: 6px 0 6px 6px;
-    }
-    .section { padding: 14px 20px; border-bottom: 2px solid #f9efe7; }
-    .section.hidden { display: none; }
-    .section-title { font-size: 13px; font-weight: 700; color: #b3937e; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.6px; display: flex; align-items: center; gap: 6px; }
-    .section-title::before { content: "🌸"; font-size: 14px; }
+    .file-list { width: 100%; max-height: 180px; overflow-y: auto; margin-top: 18px; padding-right: 4px; }
+    .file-card { background: #fffbf8; border: 1.5px solid #f0dfd2; border-radius: 24px; padding: 10px 18px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; box-shadow: 0 4px 8px #f6e8dd; }
+    .file-card .name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px; color: #6b5b50; font-weight: 500; }
+    .file-card .remove { color: #d49b7a; cursor: pointer; font-size: 20px; line-height: 1; margin-left: 12px; background: #fff2e9; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+    .sidebar { width: 380px; background: #ffffffec; border-left: 2px solid #f5e3d8; border-radius: 32px 0 0 32px; display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; box-shadow: -4px 0 18px #f2e1d4; padding: 6px 0 6px 6px; }
+    .section { padding: 16px 20px; border-bottom: 2px solid #f9efe7; }
+    .section-title { font-size: 13px; font-weight: 700; color: #b3937e; margin-bottom: 14px; display: flex; align-items: center; gap: 6px; }
+    .section-title::before { content: "🌸"; font-size: 14px; opacity: 0.8; }
     .format-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-    .format-btn { padding: 9px 4px; border: 1.5px solid #f0dfd2; border-radius: 18px; background: #fff; font-size: 12px; cursor: pointer; text-align: center; font-weight: 600; color: #8c7463; box-shadow: 0 2px 6px #f2e3d7; transition: all 0.12s; }
-    .format-btn:hover { border-color: #dbb99b; color: #b1856b; transform: translateY(-1px); }
-    .format-btn.active { background: #dbb99b; color: #fff; border-color: #dbb99b; }
-    .office-download-box {
-      background: #fff0f0; border: 1.5px dashed #f0d0d0; border-radius: 18px;
-      padding: 16px; text-align: center;
-    }
-    .office-download-box p { font-size: 12px; color: #a05a5a; margin-bottom: 10px; line-height: 1.6; }
-    .download-btn {
-      padding: 8px 24px; border: none; border-radius: 24px; background: #dbb99b;
-      color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; font-family: inherit;
-      transition: all 0.15s;
-    }
-    .download-btn:hover { background: #cdaa8a; }
-    .download-btn:disabled { background: #e0d5cc; cursor: wait; }
-    .no-file-hint { font-size: 12px; color: #c3afa2; text-align: center; padding: 16px; background: #fef8f2; border-radius: 18px; border: 1.5px dashed #f0dfd2; }
+    .format-btn { padding: 9px 4px; border: 1.5px solid #f0dfd2; border-radius: 18px; background: #fff; font-size: 12px; cursor: pointer; text-align: center; transition: all 0.12s; font-weight: 600; color: #8c7463; box-shadow: 0 2px 6px #f2e3d7; font-family: inherit; }
+    .format-btn:hover { border-color: #dbb99b; color: #b1856b; background: #fffaf5; }
+    .format-btn.active { background: #dbb99b; color: #fff; border-color: #dbb99b; box-shadow: 0 6px 12px #e2c9b6; }
     .output-row { display: flex; align-items: center; gap: 10px; }
     .output-path { flex: 1; background: #fdf7f2; border: 1.5px solid #f0dfd2; border-radius: 24px; padding: 8px 16px; font-size: 12px; color: #8c7463; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
-    .btn { padding: 8px 18px; border: none; border-radius: 28px; font-size: 13px; cursor: pointer; font-weight: 600; font-family: inherit; transition: all 0.12s; }
+    .btn { padding: 8px 18px; border: none; border-radius: 28px; font-size: 13px; cursor: pointer; font-weight: 600; transition: all 0.12s; font-family: inherit; }
     .btn-primary { background: #dbb99b; color: #fff; width: 100%; padding: 14px; font-size: 15px; border-radius: 40px; box-shadow: 0 8px 16px #e5cbb8; }
     .btn-primary:hover { background: #cdaa8a; transform: translateY(-1px); }
-    .btn-primary:disabled { background: #e0d5cc; box-shadow: none; cursor: not-allowed; transform: none; }
-    .btn-secondary { background: #fff2e9; color: #9e7f6c; border: 1px solid #f0ddcf; }
-    .convert-btn { margin: 14px 20px; }
-    .ocr-tip { background: #fdf0e7; border: 1.5px solid #f3d9c9; border-radius: 18px; padding: 12px 16px; font-size: 12px; color: #9e7f6c; line-height: 1.7; }
-    .ocr-tip b { color: #b1856b; }
-    .log-section { padding: 12px 20px 16px; border-top: 2px solid #f9efe7; flex-shrink: 0; }
-    .log-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; margin-bottom: 10px; }
-    .log-header span { font-size: 12px; font-weight: 700; color: #b3937e; }
-    .log-box { background: #fdf7f2; border: 1.5px solid #f0dfd2; border-radius: 20px; padding: 10px 12px; max-height: 120px; overflow-y: auto; }
-    .log-box.collapsed { display: none; }
-    .log-item { padding: 8px 12px; margin-bottom: 6px; border-radius: 14px; font-size: 12px; display: flex; align-items: flex-start; gap: 8px; animation: logIn 0.25s ease; }
-    .log-item:last-child { margin-bottom: 0; }
-    @keyframes logIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
-    .log-item.info { background: #eef4ff; color: #5a7a9a; }
-    .log-item.success { background: #edf9f0; color: #5a8a6a; }
-    .log-item.error { background: #fff0f0; color: #a05a5a; }
-    .log-icon { flex-shrink: 0; font-size: 14px; }
-    .log-content { flex: 1; min-width: 0; word-break: break-all; }
-    .log-time { font-size: 10px; opacity: 0.6; margin-top: 2px; }
-    .footer { padding: 10px 26px; background: #ffffffec; border-top: 2px solid #f5e3d8; text-align: center; font-size: 11px; color: #c3afa2; flex-shrink: 0; border-radius: 24px 24px 0 0; margin: 0 6px; }
-    .footer a { color: #b1856b; text-decoration: none; font-weight: 600; }
-    .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-120%); background: #dbb99b; color: #fff; padding: 12px 32px; border-radius: 40px; font-size: 13px; font-weight: 600; z-index: 1000; transition: all 0.25s ease; opacity: 0; box-shadow: 0 12px 24px #e2c9b6; }
-    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .btn-secondary { background: #fff2e9; color: #9e7f6c; border: 1px solid #f0ddcf; box-shadow: 0 2px 6px #f0dfd2; }
+    .convert-btn { margin: 16px 20px; }
     .mode-tabs { display: flex; gap: 8px; margin-bottom: 12px; }
-    .mode-tab { flex: 1; padding: 9px 8px; border: 1.5px solid #f0dfd2; border-radius: 22px; background: #fff; font-size: 12px; cursor: pointer; text-align: center; font-weight: 600; color: #8c7463; box-shadow: 0 2px 6px #f2e3d7; transition: all 0.12s; }
-    .mode-tab:hover { border-color: #dbb99b; }
-    .mode-tab.active { background: #dbb99b; color: #fff; border-color: #dbb99b; }
-    .modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(92, 79, 71, 0.4); backdrop-filter: blur(4px);
-      display: none; align-items: center; justify-content: center; z-index: 2000;
-      animation: fadeIn 0.2s ease;
-    }
-    .modal-overlay.show { display: flex; }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    .modal {
-      background: #fffdfb; border-radius: 28px; width: 560px; max-height: 80vh;
-      display: flex; flex-direction: column; overflow: hidden;
-      box-shadow: 0 24px 60px rgba(177, 133, 107, 0.25);
-      animation: modalIn 0.25s ease;
-    }
-    @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-    .modal-header { padding: 20px 26px; border-bottom: 2px solid #f9efe7; display: flex; align-items: center; justify-content: space-between; }
-    .modal-header h2 { font-size: 18px; color: #b1856b; font-weight: 700; display: flex; align-items: center; gap: 8px; }
-    .modal-close { width: 32px; height: 32px; border-radius: 50%; border: none; background: #fdf0e7; color: #b1856b; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; font-weight: 600; }
-    .modal-close:hover { background: #fae8dc; transform: rotate(90deg); }
-    .modal-body { padding: 20px 26px; overflow-y: auto; flex: 1; }
-    .support-group { margin-bottom: 16px; }
-    .support-group:last-child { margin-bottom: 0; }
-    .support-group-title { font-size: 13px; font-weight: 700; color: #b3937e; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
-    .support-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-    .support-tag { padding: 5px 12px; border-radius: 16px; font-size: 11px; font-weight: 600; background: #fdf7f2; border: 1px solid #f0dfd2; color: #8c7463; }
+    .mode-tab { flex: 1; padding: 9px 8px; border: 1.5px solid #f0dfd2; border-radius: 22px; background: #fff; font-size: 12px; cursor: pointer; text-align: center; font-weight: 600; color: #8c7463; transition: all 0.12s; box-shadow: 0 2px 6px #f2e3d7; font-family: inherit; }
+    .mode-tab:hover { border-color: #dbb99b; background: #fffaf5; }
+    .mode-tab.active { background: #dbb99b; color: #fff; border-color: #dbb99b; box-shadow: 0 6px 12px #e2c9b6; }
+    .log-section { padding: 12px 20px 16px; border-top: 2px solid #f9efe7; flex-shrink: 0; }
+    .log-header { display: flex; justify-content: space-between; align-items: center; cursor: pointer; margin-bottom: 8px; }
+    .log-header span { font-size: 12px; font-weight: 700; color: #b3937e; }
+    .log-box { background: #fdf7f2; color: #7f6a5c; font-family: 'SF Mono', Menlo, monospace; font-size: 11px; padding: 14px 16px; border-radius: 24px; max-height: 130px; overflow-y: auto; line-height: 1.7; white-space: pre-wrap; word-break: break-all; border: 1.5px solid #f0dfd2; font-weight: 500; }
+    .log-box.collapsed { display: none; }
+    .log-line { padding: 2px 0; }
+    .log-line.error { color: #e57373; }
+    .log-line.success { color: #81c784; }
+    .footer { padding: 12px 26px; background: #ffffffec; border-top: 2px solid #f5e3d8; text-align: center; font-size: 11px; color: #c3afa2; flex-shrink: 0; border-radius: 24px 24px 0 0; margin: 0 6px; font-weight: 500; }
+    .footer a { color: #b1856b; text-decoration: none; font-weight: 600; }
+    .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-120%); background: #dbb99b; color: #fff; padding: 12px 32px; border-radius: 40px; font-size: 13px; font-weight: 600; z-index: 1000; transition: all 0.25s; opacity: 0; box-shadow: 0 12px 24px #e2c9b6; }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    .download-panel { background: #f0f7ff; border-radius: 20px; padding: 14px 18px; margin-top: 10px; border: 1px solid #bbdefb; }
+    .download-panel .progress-bar { width: 100%; height: 8px; background: #e3f2fd; border-radius: 4px; overflow: hidden; margin: 8px 0; }
+    .download-panel .progress-fill { height: 100%; background: linear-gradient(90deg, #2196f3, #64b5f6); border-radius: 4px; transition: width 0.3s; }
+    .download-panel .progress-text { font-size: 11px; color: #1976d2; font-weight: 600; }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(92,79,71,0.4); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s; }
+    .modal-overlay.show { opacity: 1; visibility: visible; }
+    .modal-card { background: #fffdfb; border-radius: 32px; padding: 32px; max-width: 520px; width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: 0 24px 64px rgba(0,0,0,0.15); transform: scale(0.9); transition: transform 0.3s; }
+    .modal-overlay.show .modal-card { transform: scale(1); }
+    .modal-card h2 { color: #8c6b56; margin-bottom: 16px; font-size: 20px; }
+    .modal-card .close-btn { float: right; background: #fff2e9; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 18px; color: #b1856b; }
+    .format-category { margin-bottom: 16px; }
+    .format-category h4 { color: #b3937e; font-size: 14px; margin-bottom: 8px; }
+    .format-category .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .format-category .tag { background: #fef0e7; color: #a0765e; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #f9efe7; border-radius: 10px; }
     ::-webkit-scrollbar-thumb { background: #e0cbbc; border-radius: 10px; }
@@ -178,48 +104,32 @@
 </head>
 <body>
 <div class="header">
-  <div class="header-left">
-    <h1>Kinson Studio</h1>
+  <h1>Kinson Studio</h1>
+  <div class="header-right">
+    <span class="office-status not-ready" id="officeStatus">⚪ Office 转换未启用</span>
+    <button class="support-btn" id="supportBtn">📋 支持格式</button>
     <span class="badge">永久免费 · 无水印</span>
   </div>
-  <div class="header-right">
-    <div class="office-status not-ready" id="officeStatus">
-      <span id="officeStatusText">⚪ Office 转换未启用</span>
-      <span class="arrow">▼</span>
-    </div>
-    <button class="support-btn" id="supportBtn">📋 支持格式</button>
-  </div>
 </div>
-
-<!-- 下载进度面板 -->
-<div class="download-panel" id="downloadPanel">
-  <div class="download-panel-inner">
-    <div class="download-panel-title">
-      <span>⬇️ 正在下载 LibreOffice</span>
-      <span id="dpPercent">0%</span>
-    </div>
-    <div class="progress-bar"><div class="progress-fill" id="dpFill"></div></div>
-    <div class="download-info">
-      <span id="dpSize">0 MB / 0 MB</span>
-      <span id="dpSpeed">速度: --</span>
-      <span id="dpTime">剩余: --</span>
-    </div>
+<div class="download-panel" id="downloadPanel" style="display:none; margin: 8px 20px 0;">
+  <div style="display:flex; justify-content:space-between; align-items:center;">
+    <span style="font-size:12px; color:#1976d2; font-weight:600;" id="downloadStatus">正在下载 Office 组件...</span>
+    <span style="font-size:12px; color:#1976d2; font-weight:700;" id="downloadPercent">0%</span>
   </div>
+  <div class="progress-bar"><div class="progress-fill" id="downloadFill" style="width:0%"></div></div>
+  <div class="progress-text" id="downloadInfo">准备中...</div>
 </div>
-
 <div class="main">
-  <div class="left-panel">
-    <div class="drop-zone" id="dropZone">
-      <div class="icon">📁</div>
-      <div class="text">拖入文件，或点击选择</div>
-      <div class="hint">支持图片、音频、视频、文档、PDF、压缩包、加密音乐</div>
-    </div>
-    <div class="preview-wrap" id="previewWrap">
-      <img class="preview-image" id="previewImage" draggable="false">
+  <div class="drop-zone" id="dropZone">
+    <div class="icon" id="dropIcon">📁</div>
+    <div class="text" id="dropText">拖入文件，或点击选择（支持多选）</div>
+    <div class="hint">支持图片、音频、视频、文档、PDF、压缩包、加密音乐</div>
+    <div class="preview-wrap" id="previewWrap" style="display:none;">
+      <img class="preview-img" id="previewImg" alt="preview">
       <div class="ocr-layer" id="ocrLayer"></div>
-      <div class="ocr-loading-mask" id="ocrLoadingMask">
+      <div class="ocr-loading" id="ocrLoading" style="display:none;">
         <div class="spinner"></div>
-        <span>正在识别中...</span>
+        <span style="color:#b1856b; font-weight:600; font-size:14px;">正在识别文字...</span>
       </div>
     </div>
     <div class="file-list" id="fileList"></div>
@@ -234,8 +144,8 @@
       </div>
     </div>
     <div id="convertSections">
-      <div class="section" data-type="image">
-        <div class="section-title">图片格式</div>
+      <div class="section" data-group="image">
+        <div class="section-title">图片</div>
         <div class="format-grid">
           <div class="format-btn" data-ext="jpg">JPG</div>
           <div class="format-btn" data-ext="png">PNG</div>
@@ -244,11 +154,11 @@
           <div class="format-btn" data-ext="bmp">BMP</div>
           <div class="format-btn" data-ext="tiff">TIFF</div>
           <div class="format-btn" data-ext="avif">AVIF</div>
-          <div class="format-btn" data-ext="ico">ICO</div>
+          <div class="format-btn" data-ext="pdf">转PDF</div>
         </div>
       </div>
-      <div class="section" data-type="audio">
-        <div class="section-title">音频格式</div>
+      <div class="section" data-group="audio">
+        <div class="section-title">音频</div>
         <div class="format-grid">
           <div class="format-btn" data-ext="mp3">MP3</div>
           <div class="format-btn" data-ext="wav">WAV</div>
@@ -260,8 +170,8 @@
           <div class="format-btn" data-ext="wma">WMA</div>
         </div>
       </div>
-      <div class="section" data-type="video">
-        <div class="section-title">视频格式</div>
+      <div class="section" data-group="video">
+        <div class="section-title">视频</div>
         <div class="format-grid">
           <div class="format-btn" data-ext="mp4">MP4</div>
           <div class="format-btn" data-ext="mov">MOV</div>
@@ -273,35 +183,16 @@
           <div class="format-btn" data-ext="flv">FLV</div>
         </div>
       </div>
-      <div class="section" data-type="doc">
-        <div class="section-title">文档格式</div>
-        <div id="docFormats">
-          <div class="format-grid">
-            <div class="format-btn" data-ext="pdf">PDF</div>
-            <div class="format-btn" data-ext="docx">Word</div>
-            <div class="format-btn" data-ext="txt">TXT</div>
-            <div class="format-btn" data-ext="html">HTML</div>
-            <div class="format-btn" data-ext="md">Markdown</div>
-            <div class="format-btn" data-ext="epub">EPUB</div>
-          </div>
+      <div class="section" data-group="doc">
+        <div class="section-title">文档</div>
+        <div class="format-grid">
+          <div class="format-btn" data-ext="pdf">PDF</div>
+          <div class="format-btn" data-ext="docx">Word</div>
+          <div class="format-btn" data-ext="txt">TXT</div>
+          <div class="format-btn" data-ext="html">HTML</div>
+          <div class="format-btn" data-ext="md">Markdown</div>
+          <div class="format-btn" data-ext="epub">EPUB</div>
         </div>
-        <div class="office-download-box" id="officeDownloadBox" style="display:none;margin-top:12px;">
-          <p>⚠️ Office 转换未启用<br>Word / Excel / PPT 相关转换暂不可用</p>
-          <button class="download-btn" id="downloadOfficeBtn">⬇️ 一键下载 LibreOffice</button>
-        </div>
-      </div>
-      <div class="section" id="noFileHint">
-        <div class="no-file-hint">👆 请先在左侧选择文件，将自动显示可转换的格式</div>
-      </div>
-    </div>
-    <div class="section" id="ocrSection" style="display:none">
-      <div class="section-title">文字识别</div>
-      <div class="ocr-tip">
-        💡 <b>使用方法：</b><br>
-        1. 左侧上传图片<br>
-        2. 点击「开始识别」<br>
-        3. <b>鼠标滑动选中</b>文字（蓝色高亮）<br>
-        4. 右键 → 复制
       </div>
     </div>
     <div class="section" id="zipSection" style="display:none">
@@ -310,8 +201,9 @@
         <div class="mode-tab active" data-zipmode="pack">压缩为ZIP</div>
         <div class="mode-tab" data-zipmode="unpack">解压ZIP</div>
       </div>
-      <div style="font-size:12px;color:#b3937e;margin-top:8px;line-height:1.6;font-weight:500;">
-        压缩：可多选文件打包<br>解压：选择 ZIP 文件解压
+      <div style="font-size:12px;color:#b3937e;margin-top:8px;line-height:1.6;padding-left:4px;font-weight:500;">
+        压缩：可多选文件，打包为一个 ZIP<br>
+        解压：可多选 ZIP 文件，批量解压
       </div>
     </div>
     <div class="section">
@@ -329,75 +221,25 @@
         <span>📋 运行日志</span>
         <span id="logToggle">▼</span>
       </div>
-      <div class="log-box" id="logBox"></div>
+      <div class="log-box" id="logBox">就绪...</div>
     </div>
   </div>
 </div>
 <div class="footer">Kinson Studio · 反馈邮箱：<a href="mailto:kinsonstudio@icloud.com">kinsonstudio@icloud.com</a></div>
 <div class="toast" id="toast"></div>
-
 <div class="modal-overlay" id="supportModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h2>📋 支持的格式</h2>
-      <button class="modal-close" id="modalClose">×</button>
-    </div>
-    <div class="modal-body">
-      <div class="support-group">
-        <div class="support-group-title">🖼️ 图片</div>
-        <div class="support-tags">
-          <span class="support-tag">JPG</span><span class="support-tag">PNG</span><span class="support-tag">WebP</span>
-          <span class="support-tag">GIF</span><span class="support-tag">BMP</span><span class="support-tag">TIFF</span>
-          <span class="support-tag">AVIF</span><span class="support-tag">ICO</span><span class="support-tag">HEIC</span><span class="support-tag">RAW</span>
-        </div>
-      </div>
-      <div class="support-group">
-        <div class="support-group-title">🎵 音频</div>
-        <div class="support-tags">
-          <span class="support-tag">MP3</span><span class="support-tag">WAV</span><span class="support-tag">FLAC</span>
-          <span class="support-tag">M4A</span><span class="support-tag">AAC</span><span class="support-tag">OGG</span>
-          <span class="support-tag">Opus</span><span class="support-tag">WMA</span>
-        </div>
-      </div>
-      <div class="support-group">
-        <div class="support-group-title">🎬 视频</div>
-        <div class="support-tags">
-          <span class="support-tag">MP4</span><span class="support-tag">MOV</span><span class="support-tag">MKV</span>
-          <span class="support-tag">WebM</span><span class="support-tag">AVI</span><span class="support-tag">M4V</span>
-          <span class="support-tag">WMV</span><span class="support-tag">FLV</span>
-        </div>
-      </div>
-      <div class="support-group">
-        <div class="support-group-title">📄 文档（需下载 LibreOffice）</div>
-        <div class="support-tags">
-          <span class="support-tag">PDF</span><span class="support-tag">Word</span><span class="support-tag">Excel</span>
-          <span class="support-tag">PPT</span><span class="support-tag">TXT</span><span class="support-tag">HTML</span>
-          <span class="support-tag">Markdown</span><span class="support-tag">EPUB</span><span class="support-tag">RTF</span>
-          <span class="support-tag">CSV</span>
-        </div>
-      </div>
-      <div class="support-group">
-        <div class="support-group-title">🔓 加密音乐解密</div>
-        <div class="support-tags">
-          <span class="support-tag">NCM</span><span class="support-tag">QMC</span><span class="support-tag">KGM</span><span class="support-tag">KGG</span>
-        </div>
-      </div>
-      <div class="support-group">
-        <div class="support-group-title">📦 压缩包</div>
-        <div class="support-tags">
-          <span class="support-tag">ZIP 压缩</span><span class="support-tag">ZIP 解压</span>
-        </div>
-      </div>
-      <div class="support-group">
-        <div class="support-group-title">🔍 OCR 文字识别</div>
-        <div class="support-tags">
-          <span class="support-tag">中文识别</span><span class="support-tag">英文识别</span><span class="support-tag">图片文字提取</span>
-        </div>
-      </div>
-    </div>
+  <div class="modal-card">
+    <button class="close-btn" id="modalClose">×</button>
+    <h2>📋 支持的格式</h2>
+    <div class="format-category"><h4>🖼️ 图片</h4><div class="tags"><span class="tag">JPG</span><span class="tag">PNG</span><span class="tag">WebP</span><span class="tag">GIF</span><span class="tag">BMP</span><span class="tag">TIFF</span><span class="tag">AVIF</span><span class="tag">ICO</span><span class="tag">HEIC</span><span class="tag">RAW</span><span class="tag">转PDF</span></div></div>
+    <div class="format-category"><h4>🎵 音频</h4><div class="tags"><span class="tag">MP3</span><span class="tag">WAV</span><span class="tag">FLAC</span><span class="tag">M4A</span><span class="tag">AAC</span><span class="tag">OGG</span><span class="tag">Opus</span><span class="tag">WMA</span></div></div>
+    <div class="format-category"><h4>🎬 视频</h4><div class="tags"><span class="tag">MP4</span><span class="tag">MOV</span><span class="tag">MKV</span><span class="tag">WebM</span><span class="tag">AVI</span><span class="tag">M4V</span><span class="tag">WMV</span><span class="tag">FLV</span></div></div>
+    <div class="format-category"><h4>📄 文档</h4><div class="tags"><span class="tag">PDF</span><span class="tag">Word</span><span class="tag">Excel</span><span class="tag">PPT</span><span class="tag">TXT</span><span class="tag">HTML</span><span class="tag">Markdown</span><span class="tag">EPUB</span></div></div>
+    <div class="format-category"><h4>🔓 加密音乐</h4><div class="tags"><span class="tag">NCM</span><span class="tag">QMC</span><span class="tag">KGM</span><span class="tag">KGG</span></div></div>
+    <div class="format-category"><h4>🗜️ 压缩包</h4><div class="tags"><span class="tag">ZIP 压缩</span><span class="tag">ZIP 解压</span><span class="tag">批量处理</span></div></div>
+    <div class="format-category"><h4>🔍 OCR</h4><div class="tags"><span class="tag">中文识别</span><span class="tag">英文识别</span><span class="tag">微信式提取</span></div></div>
   </div>
 </div>
-
 <script>
   let selectedFiles = []
   let selectedFormat = null
@@ -405,164 +247,70 @@
   let currentMode = 'convert'
   let zipMode = 'pack'
   let toastTimer = null
-  let ocrWords = []
-  let ocrImgW = 0, ocrImgH = 0
-  let officeReady = false
-  let isDownloading = false
-
   const dropZone = document.getElementById('dropZone')
-  const previewWrap = document.getElementById('previewWrap')
-  const previewImage = document.getElementById('previewImage')
-  const ocrLayer = document.getElementById('ocrLayer')
-  const ocrLoadingMask = document.getElementById('ocrLoadingMask')
   const fileList = document.getElementById('fileList')
   const convertBtn = document.getElementById('convertBtn')
   const logBox = document.getElementById('logBox')
-  const supportModal = document.getElementById('supportModal')
-  const officeStatus = document.getElementById('officeStatus')
-  const officeStatusText = document.getElementById('officeStatusText')
-  const officeDownloadBox = document.getElementById('officeDownloadBox')
-  const docFormats = document.getElementById('docFormats')
-  const downloadPanel = document.getElementById('downloadPanel')
+  const outputPathEl = document.getElementById('outputPath')
+  const toast = document.getElementById('toast')
+  const previewWrap = document.getElementById('previewWrap')
+  const previewImg = document.getElementById('previewImg')
+  const ocrLayer = document.getElementById('ocrLayer')
+  const ocrLoading = document.getElementById('ocrLoading')
+  const dropIcon = document.getElementById('dropIcon')
+  const dropText = document.getElementById('dropText')
 
   if (window.api && window.api.getDefaultOutputDir) {
-    window.api.getDefaultOutputDir().then(d => { outputDir = d; document.getElementById('outputPath').textContent = d.split('/').pop() })
+    window.api.getDefaultOutputDir().then(d => { outputDir = d; outputPathEl.textContent = d.split('/').pop() }).catch(() => {})
   }
 
   function showToast(msg) {
-    const t = document.getElementById('toast')
-    t.textContent = msg; t.classList.add('show')
-    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2500)
+    toast.textContent = msg; toast.classList.add('show')
+    if (toastTimer) clearTimeout(toastTimer)
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2500)
   }
-
   function log(msg, type) {
-    if (!type) {
-      if (msg.includes('错误') || msg.includes('失败')) type = 'error'
-      else if (msg.includes('完成') || msg.includes('成功') || msg.includes('就绪')) type = 'success'
-      else type = 'info'
-    }
-    const icons = { info: 'ℹ️', success: '✅', error: '❌' }
-    const now = new Date()
-    const time = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`
-    const item = document.createElement('div')
-    item.className = 'log-item ' + type
-    item.innerHTML = `<span class="log-icon">${icons[type]}</span><div class="log-content">${msg}<div class="log-time">${time}</div></div>`
-    logBox.appendChild(item); logBox.scrollTop = logBox.scrollHeight
+    const line = document.createElement('div')
+    line.className = 'log-line' + (type ? ' ' + type : '')
+    line.textContent = msg
+    logBox.appendChild(line)
+    logBox.scrollTop = logBox.scrollHeight
   }
   if (window.api && window.api.onLog) window.api.onLog(msg => log(msg))
-  log('就绪，等待操作', 'info')
 
-  function updateOfficeUI() {
-    if (officeReady) {
-      officeStatus.className = 'office-status ready'
-      officeStatusText.textContent = '🟢 Office 转换已准备就绪'
-      officeDownloadBox.style.display = 'none'
-      docFormats.style.display = ''
-    } else if (isDownloading) {
-      officeStatus.className = 'office-status downloading'
-      officeStatusText.textContent = '⏳ 正在下载 Office 组件...'
-    } else {
-      officeStatus.className = 'office-status not-ready'
-      officeStatusText.textContent = '⚪ Office 转换未启用'
-      officeDownloadBox.style.display = 'block'
-      docFormats.style.display = 'none'
-    }
-  }
-
-  async function checkOffice() {
-    if (window.api && window.api.checkOffice) {
-      officeReady = await window.api.checkOffice()
-      updateOfficeUI()
-    }
-  }
-  checkOffice()
-
-  if (window.api && window.api.onDownloadProgress) {
-    window.api.onDownloadProgress(p => {
-      if (typeof p === 'number') p = { percent: p }
-      document.getElementById('dpFill').style.width = (p.percent || 0) + '%'
-      document.getElementById('dpPercent').textContent = (p.percent || 0) + '%'
-      if (p.downloaded && p.total) document.getElementById('dpSize').textContent = p.downloaded + ' / ' + p.total
-      if (p.speed) document.getElementById('dpSpeed').textContent = '速度: ' + p.speed
-      if (p.timeLeft) document.getElementById('dpTime').textContent = '剩余: ' + p.timeLeft
-    })
-  }
-
-  officeStatus.onclick = () => {
-    if (isDownloading) {
-      downloadPanel.classList.toggle('show')
-      officeStatus.classList.toggle('expanded')
-    } else if (!officeReady) {
-      document.getElementById('downloadOfficeBtn').click()
-    }
-  }
-
-  document.getElementById('downloadOfficeBtn').onclick = async () => {
-    if (!window.api || !window.api.downloadOffice) return
-    const btn = document.getElementById('downloadOfficeBtn')
-    btn.disabled = true
-    btn.textContent = '下载中...'
-    isDownloading = true
-    updateOfficeUI()
-    downloadPanel.classList.add('show')
-    officeStatus.classList.add('expanded')
-    try {
-      await window.api.downloadOffice()
-      officeReady = true
-      isDownloading = false
-      updateOfficeUI()
-      showToast('Office 转换已准备就绪！')
-      setTimeout(() => { downloadPanel.classList.remove('show'); officeStatus.classList.remove('expanded') }, 3000)
-    } catch(e) {
-      btn.disabled = false
-      btn.textContent = '⬇️ 一键下载 LibreOffice'
-      isDownloading = false
-      updateOfficeUI()
-      showToast('下载失败，请检查网络')
-    }
-  }
-
-  document.getElementById('supportBtn').onclick = () => supportModal.classList.add('show')
-  document.getElementById('modalClose').onclick = () => supportModal.classList.remove('show')
-  supportModal.onclick = (e) => { if (e.target === supportModal) supportModal.classList.remove('show') }
-
-  function detectFormatGroup(filePath) {
-    const e = filePath.split('.').pop().toLowerCase()
-    if (['jpg','jpeg','png','webp','avif','tiff','gif','bmp','ico','heic','cr2','cr3','dng','arw','nef','raf','rw2','orf'].includes(e)) return 'image'
-    if (['mp3','wav','flac','m4a','aac','ogg','opus','wma'].includes(e)) return 'audio'
-    if (['ncm','qmc0','qmc3','qmcflac','qmcogg','kgm','kgma','kgg'].includes(e)) return 'audio'
-    if (['mp4','mov','mkv','webm','avi','m4v','wmv','flv'].includes(e)) return 'video'
-    if (['doc','docx','odt','rtf','wps','wpd','xls','xlsx','xlsm','ods','csv','tsv','et','ppt','pptx','odp','dps','pdf','txt','md','html','json','log','xml','yaml','epub','mobi'].includes(e)) return 'doc'
+  function detectFormatGroup(fp) {
+    const e = fp.split('.').pop().toLowerCase()
+    if(['jpg','jpeg','png','webp','avif','tiff','gif','bmp','heic','cr2','cr3','dng','arw','nef','raf','rw2','orf'].includes(e)) return 'image'
+    if(['mp3','wav','flac','m4a','aac','ogg','opus','wma'].includes(e)) return 'audio'
+    if(['mp4','mov','mkv','webm','avi','m4v','wmv','flv'].includes(e)) return 'video'
+    if(['doc','docx','odt','rtf','xls','xlsx','xlsm','ods','csv','ppt','pptx','odp','pdf','txt','md','html','json','epub','mobi'].includes(e)) return 'doc'
+    if(['ncm','qmc0','qmc3','qmcflac','qmcogg','kgm','kgma','kgg'].includes(e)) return 'audio'
     return null
   }
-
   function updateFormatGroups() {
-    const groups = document.querySelectorAll('#convertSections .section[data-type]')
-    const hint = document.getElementById('noFileHint')
-    if (selectedFiles.length === 0) { groups.forEach(g => g.classList.add('hidden')); hint.style.display = ''; return }
-    const group = detectFormatGroup(selectedFiles[0])
-    hint.style.display = 'none'
-    groups.forEach(g => {
-      if (g.dataset.type === group) g.classList.remove('hidden')
-      else { g.classList.add('hidden'); g.querySelectorAll('.format-btn.active').forEach(b => b.classList.remove('active')) }
+    const groups = document.querySelectorAll('#convertSections .section')
+    if (selectedFiles.length === 0) { groups.forEach(s => s.style.display = ''); return }
+    const fileGroup = detectFormatGroup(selectedFiles[0])
+    groups.forEach(s => {
+      s.style.display = (s.dataset.group === fileGroup) ? '' : 'none'
     })
-    if (!group) { hint.style.display = ''; hint.querySelector('.no-file-hint').textContent = '⚠️ 该文件类型暂不支持转换' }
-    selectedFormat = null
-  }
-
-  function showPreview(filePath) {
-    const ext = filePath.split('.').pop().toLowerCase()
-    if (['jpg','jpeg','png','webp','gif','bmp','tiff','avif'].includes(ext)) {
-      dropZone.style.display = 'none'
-      previewWrap.classList.add('show')
-      previewImage.src = 'file://' + filePath
-      ocrLayer.classList.remove('show'); ocrLayer.innerHTML = ''
-      previewImage.onload = () => { ocrImgW = previewImage.naturalWidth; ocrImgH = previewImage.naturalHeight }
-    } else { dropZone.style.display = 'flex'; previewWrap.classList.remove('show') }
   }
 
   function renderFiles() {
     fileList.innerHTML = ''
+    if (selectedFiles.length === 1 && detectFormatGroup(selectedFiles[0]) === 'image') {
+      previewWrap.style.display = 'flex'
+      previewImg.src = 'file://' + selectedFiles[0]
+      dropIcon.style.display = 'none'
+      dropText.style.display = 'none'
+      document.querySelector('.hint').style.display = 'none'
+    } else {
+      previewWrap.style.display = 'none'
+      ocrLayer.innerHTML = ''
+      dropIcon.style.display = ''
+      dropText.style.display = ''
+      document.querySelector('.hint').style.display = ''
+    }
     selectedFiles.forEach((f, i) => {
       const card = document.createElement('div')
       card.className = 'file-card'
@@ -570,50 +318,40 @@
       fileList.appendChild(card)
     })
     document.querySelectorAll('.remove').forEach(el => {
-      el.onclick = (e) => {
-        e.stopPropagation()
-        selectedFiles.splice(parseInt(el.dataset.i), 1)
-        renderFiles(); updateFormatGroups()
-        if (selectedFiles.length === 0) { dropZone.style.display = 'flex'; previewWrap.classList.remove('show') }
-        else showPreview(selectedFiles[0])
-      }
+      el.onclick = (e) => { e.stopPropagation(); selectedFiles.splice(parseInt(el.dataset.i), 1); renderFiles(); updateFormatGroups() }
     })
   }
 
-  async function chooseFiles() {
+  dropZone.onclick = async () => {
     if (!window.api) return
     let files
-    if (currentMode === 'zip' && zipMode === 'pack') files = await window.api.openFiles()
-    else { const f = await window.api.openFile(); files = f ? [f] : [] }
-    if (files && files.length) { selectedFiles = files; renderFiles(); showPreview(files[0]); updateFormatGroups() }
+    if (currentMode === 'zip') files = await window.api.openFiles()
+    else if (currentMode === 'ocr') { const f = await window.api.openFile(); files = f ? [f] : [] }
+    else files = await window.api.openFiles()
+    if (files && files.length) { selectedFiles = files; renderFiles(); updateFormatGroups() }
   }
-  dropZone.onclick = chooseFiles
-  previewWrap.onclick = (e) => { if (e.target === previewWrap) chooseFiles() }
   dropZone.ondragover = (e) => { e.preventDefault(); dropZone.classList.add('dragover') }
   dropZone.ondragleave = () => dropZone.classList.remove('dragover')
   dropZone.ondrop = (e) => {
     e.preventDefault(); dropZone.classList.remove('dragover')
     const files = Array.from(e.dataTransfer.files).map(f => f.path)
-    if (files.length) { selectedFiles = files; renderFiles(); showPreview(files[0]); updateFormatGroups() }
+    if (files.length) { selectedFiles = files; renderFiles(); updateFormatGroups() }
   }
 
   document.querySelectorAll('.mode-tab[data-mode]').forEach(tab => {
     tab.onclick = () => {
       document.querySelectorAll('.mode-tab[data-mode]').forEach(t => t.classList.remove('active'))
-      tab.classList.add('active')
-      currentMode = tab.dataset.mode
+      tab.classList.add('active'); currentMode = tab.dataset.mode
       document.getElementById('convertSections').style.display = currentMode === 'convert' ? '' : 'none'
       document.getElementById('zipSection').style.display = currentMode === 'zip' ? '' : 'none'
-      document.getElementById('ocrSection').style.display = currentMode === 'ocr' ? '' : 'none'
       convertBtn.textContent = currentMode === 'ocr' ? '开始识别' : currentMode === 'zip' ? (zipMode === 'pack' ? '开始压缩' : '开始解压') : '开始转换'
-      if (currentMode !== 'ocr') { ocrLayer.classList.remove('show'); ocrLayer.innerHTML = '' }
+      if (currentMode === 'ocr') { previewWrap.style.display = 'none'; ocrLayer.innerHTML = '' }
     }
   })
   document.querySelectorAll('.mode-tab[data-zipmode]').forEach(tab => {
     tab.onclick = () => {
       document.querySelectorAll('.mode-tab[data-zipmode]').forEach(t => t.classList.remove('active'))
-      tab.classList.add('active')
-      zipMode = tab.dataset.zipmode
+      tab.classList.add('active'); zipMode = tab.dataset.zipmode
       convertBtn.textContent = zipMode === 'pack' ? '开始压缩' : '开始解压'
     }
   })
@@ -626,79 +364,83 @@
   document.getElementById('chooseDir').onclick = async () => {
     if (!window.api) return
     const d = await window.api.chooseOutputDir()
-    if (d) { outputDir = d; document.getElementById('outputPath').textContent = d.split('/').pop() }
+    if (d) { outputDir = d; outputPathEl.textContent = d.split('/').pop() }
   }
 
-  function renderOcrLayer() {
-    const rect = previewImage.getBoundingClientRect()
-    const parentRect = previewWrap.getBoundingClientRect()
-    const offsetX = rect.left - parentRect.left, offsetY = rect.top - parentRect.top
-    const scaleX = rect.width / ocrImgW, scaleY = rect.height / ocrImgH
+  async function doOcr(filePath) {
+    ocrLoading.style.display = 'flex'
     ocrLayer.innerHTML = ''
-    ocrWords.forEach(w => {
-      const span = document.createElement('span')
-      span.className = 'ocr-word'
-      span.textContent = w.text
-      const wpx = w.width * scaleX, hpx = w.height * scaleY
-      span.style.left = (offsetX + w.left * scaleX) + 'px'
-      span.style.top = (offsetY + w.top * scaleY) + 'px'
-      span.style.width = wpx + 'px'
-      span.style.height = hpx + 'px'
-      span.style.fontSize = Math.max(10, hpx * 0.9) + 'px'
-      span.title = w.text
-      ocrLayer.appendChild(span)
-    })
-    ocrLayer.classList.add('show')
-  }
-  window.addEventListener('resize', () => { if (ocrWords.length) renderOcrLayer() })
-
-  async function doOcr() {
-    if (!selectedFiles.length) { showToast('请先选择图片'); return }
-    ocrLoadingMask.classList.add('show'); ocrLayer.classList.remove('show')
-    log('开始识别：' + selectedFiles[0].split('/').pop(), 'info')
     try {
-      const res = await window.api.ocr(selectedFiles[0])
-      ocrWords = res.words || []
-      ocrLoadingMask.classList.remove('show')
-      if (ocrWords.length) {
-        renderOcrLayer()
-        log('识别完成，共 ' + ocrWords.length + ' 个词，滑动选中后右键复制', 'success')
-        showToast('识别完成，滑动选中文字复制')
-      } else { log('未识别到文字', 'error'); showToast('未识别到文字') }
-    } catch(e) { ocrLoadingMask.classList.remove('show'); log('识别失败：' + e.message, 'error'); showToast('识别失败') }
+      const r = await window.api.ocr(filePath, outputDir)
+      ocrLoading.style.display = 'none'
+      const img = previewImg
+      const scaleX = img.clientWidth / img.naturalWidth
+      const scaleY = img.clientHeight / img.naturalHeight
+      r.words.forEach(w => {
+        const span = document.createElement('span')
+        span.className = 'ocr-word'
+        span.textContent = w.text
+        span.style.left = (w.x * scaleX) + 'px'
+        span.style.top = (w.y * scaleY) + 'px'
+        span.style.width = (w.w * scaleX) + 'px'
+        span.style.height = (w.h * scaleY) + 'px'
+        span.style.fontSize = Math.max(10, (w.h * scaleY) * 0.9) + 'px'
+        ocrLayer.appendChild(span)
+      })
+      log(`识别完成，共 ${r.words.length} 个词，可滑动选中复制`, 'success')
+      showToast('识别完成，可滑动选中文字复制')
+    } catch (err) {
+      ocrLoading.style.display = 'none'
+      log('识别失败：' + err.message, 'error')
+      showToast('识别失败')
+    }
   }
 
   convertBtn.onclick = async () => {
     if (selectedFiles.length === 0) { showToast('请先选择文件'); return }
-    if (!window.api) return
+    if (!window.api) { showToast('演示模式'); return }
     convertBtn.disabled = true
-    const originalText = convertBtn.textContent
     convertBtn.textContent = '处理中...'
     try {
-      if (currentMode === 'ocr') await doOcr()
-      else if (currentMode === 'zip') {
+      if (currentMode === 'ocr') {
+        const ext = selectedFiles[0].split('.').pop().toLowerCase()
+        if (!['jpg','jpeg','png','webp','gif','bmp','tiff','avif'].includes(ext)) {
+          showToast('OCR 仅支持图片文件'); log('OCR 失败：不支持的文件类型', 'error')
+          convertBtn.disabled = false; convertBtn.textContent = '开始识别'; return
+        }
+        await doOcr(selectedFiles[0])
+      } else if (currentMode === 'zip') {
         if (zipMode === 'pack') {
           const out = outputDir + '/打包_' + Date.now() + '.zip'
-          log('开始压缩 ' + selectedFiles.length + ' 个文件', 'info')
           const r = await window.api.zipPack(selectedFiles, out)
-          log('压缩完成：' + r.output.split('/').pop(), 'success'); showToast('压缩完成')
+          showToast('压缩完成'); log('输出：' + r.output, 'success')
         } else {
-          log('开始解压：' + selectedFiles[0].split('/').pop(), 'info')
-          const r = await window.api.unzip(selectedFiles[0], outputDir)
-          log('解压完成：' + r.output.split('/').pop(), 'success'); showToast('解压完成')
+          for (const f of selectedFiles) {
+            const r = await window.api.unzip(f, outputDir)
+            log('输出：' + r.output, 'success')
+          }
+          showToast('批量解压完成')
         }
       } else {
-        if (!selectedFormat) { showToast('请选择目标格式'); convertBtn.disabled = false; convertBtn.textContent = originalText; return }
-        for (const f of selectedFiles) {
-          log('转换：' + f.split('/').pop() + ' → ' + selectedFormat.toUpperCase(), 'info')
-          const r = await window.api.convert(f, selectedFormat, outputDir)
-          log('完成：' + r.output.split('/').pop(), 'success')
+        if (!selectedFormat) { showToast('请选择目标格式'); convertBtn.disabled = false; convertBtn.textContent = '开始转换'; return }
+        const allImages = selectedFiles.every(f => ['jpg','jpeg','png','webp','gif','bmp','tiff','avif'].includes(f.split('.').pop().toLowerCase()))
+        if (allImages && selectedFormat === 'pdf' && selectedFiles.length > 1) {
+          const baseName = selectedFiles[0].split('/').pop().replace(/\.[^.]+$/, '')
+          const outPath = outputDir + '/' + baseName + '_合并.pdf'
+          log(`图片转PDF：${selectedFiles.length} 张图片`)
+          const r = await window.api.imagesToPdf(selectedFiles, outPath)
+          log('输出：' + r.output, 'success'); showToast('图片转PDF完成')
+        } else {
+          for (const f of selectedFiles) {
+            const r = await window.api.convert(f, selectedFormat, outputDir)
+            log('输出：' + r.output, 'success')
+          }
+          showToast('批量转换完成')
         }
-        showToast('转换完成')
       }
-    } catch (err) { log('错误：' + err.message, 'error'); showToast('处理失败') }
+    } catch (err) { showToast('处理失败'); log('错误：' + err.message, 'error') }
     convertBtn.disabled = false
-    convertBtn.textContent = originalText
+    convertBtn.textContent = currentMode === 'ocr' ? '开始识别' : currentMode === 'zip' ? (zipMode === 'pack' ? '开始压缩' : '开始解压') : '开始转换'
   }
 
   document.getElementById('logHeader').onclick = () => {
@@ -706,7 +448,44 @@
     document.getElementById('logToggle').textContent = logBox.classList.contains('collapsed') ? '▶' : '▼'
   }
 
-  updateFormatGroups()
+  const officeStatus = document.getElementById('officeStatus')
+  const downloadPanel = document.getElementById('downloadPanel')
+  if (window.api && window.api.checkOffice) {
+    window.api.checkOffice().then(ready => {
+      if (ready) { officeStatus.textContent = '🟢 Office 转换已就绪'; officeStatus.className = 'office-status ready' }
+      else { officeStatus.textContent = '⚪ Office 转换未启用'; officeStatus.className = 'office-status not-ready' }
+    })
+  }
+  officeStatus.onclick = async () => {
+    if (officeStatus.classList.contains('not-ready')) {
+      if (confirm('需要下载 LibreOffice（约300MB），是否开始下载？')) {
+        officeStatus.textContent = '🔵 正在下载...'; officeStatus.className = 'office-status downloading'
+        downloadPanel.style.display = 'block'
+        try {
+          await window.api.downloadOffice()
+          officeStatus.textContent = '🟢 Office 转换已就绪'; officeStatus.className = 'office-status ready'
+          downloadPanel.style.display = 'none'
+          showToast('Office 组件安装完成')
+        } catch (e) {
+          officeStatus.textContent = '⚪ Office 转换未启用'; officeStatus.className = 'office-status not-ready'
+          downloadPanel.style.display = 'none'
+          showToast('下载失败，请重试')
+        }
+      }
+    }
+  }
+  if (window.api && window.api.onDownloadProgress) {
+    window.api.onDownloadProgress(data => {
+      document.getElementById('downloadPercent').textContent = data.percent + '%'
+      document.getElementById('downloadFill').style.width = data.percent + '%'
+      document.getElementById('downloadStatus').textContent = data.status + ' Office 组件...'
+      document.getElementById('downloadInfo').textContent = '下载进度：' + data.percent + '%'
+    })
+  }
+
+  document.getElementById('supportBtn').onclick = () => document.getElementById('supportModal').classList.add('show')
+  document.getElementById('modalClose').onclick = () => document.getElementById('supportModal').classList.remove('show')
+  document.getElementById('supportModal').onclick = (e) => { if (e.target.id === 'supportModal') document.getElementById('supportModal').classList.remove('show') }
 </script>
 </body>
 </html>

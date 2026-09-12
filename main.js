@@ -4,11 +4,14 @@ const fs = require('fs')
 const os = require('os')
 const { spawn } = require('child_process')
 
+const IS_WIN = process.platform === 'win32'
+const EXE = IS_WIN ? '.exe' : ''
+
 function getBin(name) {
   const rp = process.resourcesPath || __dirname
-  const packed = path.join(rp, 'bin', name)
+  const packed = path.join(rp, 'bin', name + EXE)
   if (fs.existsSync(packed)) return packed
-  return name
+  return name + EXE
 }
 
 let FFMPEG = getBin('ffmpeg')
@@ -19,9 +22,26 @@ const TESSERACT   = getBin('tesseract')
 const PDFTOPPM    = getBin('pdftoppm')
 const PDFTOTEXT   = getBin('pdftotext')
 const PANDOC      = getBin('pandoc')
-const LIBREOFFICE = '/Applications/LibreOffice.app/Contents/MacOS/soffice'
 
-function hasOffice() { return fs.existsSync(LIBREOFFICE) }
+function getLibreOffice() {
+  if (IS_WIN) {
+    const paths = [
+      'C:\\Program Files\\LibreOffice\\program\\soffice.exe',
+      'C:\\Program Files (x86)\\LibreOffice\\program\\soffice.exe'
+    ]
+    for (const p of paths) if (fs.existsSync(p)) return p
+    return 'soffice.exe'
+  }
+  return getBin('libreoffice')
+}
+
+function hasOffice() {
+  if (IS_WIN) {
+    return fs.existsSync('C:\\Program Files\\LibreOffice\\program\\soffice.exe') ||
+           fs.existsSync('C:\\Program Files (x86)\\LibreOffice\\program\\soffice.exe')
+  }
+  return fs.existsSync('/Applications/LibreOffice.app/Contents/MacOS/soffice')
+}
 
 let mainWindow = null
 
@@ -29,7 +49,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1150, height: 750, minWidth: 960, minHeight: 620,
     title: 'Kinson Studio',
-    backgroundColor: '#fefaf6',
+    backgroundColor: '#f5f6f8',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
@@ -38,18 +58,6 @@ function createWindow() {
   })
   mainWindow.loadFile('index.html')
 
-  mainWindow.webContents.on('context-menu', async (e, params) => {
-    const selectedText = await mainWindow.webContents.executeJavaScript('window.getSelection().toString()')
-    const menu = Menu.buildFromTemplate([
-      { label: '复制', enabled: selectedText.length > 0, click: () => clipboard.writeText(selectedText) },
-      { type: 'separator' },
-      { label: '全选', click: () => mainWindow.webContents.selectAll() }
-    ])
-    menu.popup({ window: mainWindow })
-  })
-}
-
-app.whenReady().then(() => {
   const template = [
     { label: '文件', submenu: [
       { label: '打开文件', accelerator: 'CmdOrCtrl+O', click: () => { if(mainWindow) mainWindow.webContents.send('menu-open-file') } },
@@ -65,8 +73,8 @@ app.whenReady().then(() => {
     { label: '显示', submenu: [
       { role: 'reload', label: '重新加载' }, { role: 'toggleDevTools', label: '开发者工具' },
       { type: 'separator' },
-      { role: 'resetZoom', label: '实际大小' }, { role: 'zoomIn', label: '放大' }, { role: 'zoomOut', label: '缩小' },
-      { type: 'separator' },
+      { role: 'resetZoom', label: '实际大小' }, { role: 'zoomIn', label: '放大' },
+      { role: 'zoomOut', label: '缩小' }, { type: 'separator' },
       { role: 'togglefullscreen', label: '进入全屏' }
     ]},
     { label: '窗口', submenu: [
@@ -88,9 +96,9 @@ app.whenReady().then(() => {
     ]})
   }
   Menu.setApplicationMenu(Menu.buildFromTemplate(template))
-  createWindow()
-})
+}
 
+app.whenReady().then(() => { createWindow() })
 app.on('window-all-closed', () => { if (process.platform !== 'darwin') app.quit() })
 app.on('activate', () => { if (BrowserWindow.getAllWindows().length === 0) createWindow() })
 
@@ -102,7 +110,7 @@ function runCmd(cmd, args, opts = {}) {
     let stderr = ''
     p.stderr.on('data', d => { stderr += d; if (stderr.length > 2000) stderr = stderr.slice(-2000) })
     p.on('close', code => code === 0 ? resolve() : reject(new Error(`命令失败：${cmd} ${args.join(' ')}\n${stderr.slice(-400)}`)))
-    p.on('error', err => reject(new Error(`无法启动 ${cmd}：${err.message}`)))
+    p.on('error', err => reject(new Error(`无法启动 ${cmd}：${err.message}。请先安装对应工具`)))
   })
 }
 
@@ -121,7 +129,6 @@ function detectType(fp) {
   if(['ppt','pptx','odp','dps'].includes(e)) return 'ppt'
   if(e==='pdf') return 'pdf'
   if(['txt','md','html','json','log','xml','yaml','epub','mobi'].includes(e)) return 'text'
-  if(['zip','rar','7z','tar','gz'].includes(e)) return 'archive'
   return null
 }
 
@@ -138,77 +145,55 @@ ipcMain.handle('chooseOutputDir', async () => {
   return r.canceled ? null : r.filePaths[0]
 })
 ipcMain.handle('getDefaultOutputDir', () => path.join(os.homedir(),'Downloads'))
-
 ipcMain.handle('check-office', () => hasOffice())
 
-ipcMain.handle('download-office', async () => {
-  const arch = process.arch === 'arm64' ? 'aarch64' : 'x86_64'
-  const version = '25.8.7'
-  const dmgPath = path.join(os.tmpdir(), 'LibreOffice.dmg')
-
-  const mirrors = [
-	  `https://mirrors.cloud.tencent.com/libreoffice/libreoffice/stable/${version}/mac/${arch}/LibreOffice_${version}_MacOS_${arch}.dmg`,
-    `https://mirrors.tuna.tsinghua.edu.cn/libreoffice/libreoffice/stable/${version}/mac/${arch}/LibreOffice_${version}_MacOS_${arch}.dmg`,
-    `https://mirrors.ustc.edu.cn/libreoffice/libreoffice/stable/${version}/mac/${arch}/LibreOffice_${version}_MacOS_${arch}.dmg`,
-    `https://mirrors.huaweicloud.com/libreoffice/libreoffice/stable/${version}/mac/${arch}/LibreOffice_${version}_MacOS_${arch}.dmg`,
-    `https://download.documentfoundation.org/libreoffice/stable/${version}/mac/${arch}/LibreOffice_${version}_MacOS_${arch}.dmg`
+ipcMain.handle('download-office', async (event) => {
+  const urls = IS_WIN ? [
+    'https://mirrors.cloud.tencent.com/libreoffice/libreoffice/stable/25.8.7/win/x86_64/LibreOffice_25.8.7_Win_x86-64.msi'
+  ] : [
+    'https://mirrors.cloud.tencent.com/libreoffice/libreoffice/stable/25.8.7/mac/aarch64/LibreOffice_25.8.7_MacOS_aarch64.dmg'
   ]
-
-  function downloadWithProgress(url, dest) {
-    return new Promise((resolve, reject) => {
-      if (fs.existsSync(dest)) fs.unlinkSync(dest)
-      const p = spawn('curl', ['-L', '-#', '-o', dest, url])
-      let buf = ''
-      p.stderr.on('data', d => {
-        buf += d.toString()
-        const lines = buf.split('\r')
-        const last = lines[lines.length - 1].trim()
-        const parts = last.split(/\s+/)
-        if (parts.length >= 12 && !isNaN(parseInt(parts[2]))) {
-          const percent = Math.min(100, parseInt(parts[2]))
-          if (mainWindow) {
-            mainWindow.webContents.send('download-progress', {
-              percent,
-              downloaded: parts[3],
-              total: parts[1],
-              speed: parts[11],
-              timeLeft: parts[10]
-            })
-          }
-        }
-      })
-      p.on('close', code => {
-        if (code !== 0) return reject(new Error('curl 退出码 ' + code))
-        const size = fs.existsSync(dest) ? fs.statSync(dest).size : 0
-        if (size < 50 * 1024 * 1024) return reject(new Error('下载文件过小（' + Math.round(size/1024/1024) + 'MB），可能镜像失效'))
-        resolve()
-      })
-      p.on('error', reject)
-    })
-  }
-
-
-  let lastErr = null
-  for (let i = 0; i < mirrors.length; i++) {
+  const tmp = path.join(os.tmpdir(), IS_WIN ? 'LibreOffice.msi' : 'LibreOffice.dmg')
+  for (const url of urls) {
     try {
-      log('正在从镜像 ' + (i+1) + '/' + mirrors.length + ' 下载 LibreOffice...')
-      await downloadWithProgress(mirrors[i], dmgPath)
-      log('下载完成，正在安装...')
-      await runCmd('hdiutil', ['attach', '-nobrowse', dmgPath])
-      const volName = fs.readdirSync('/Volumes').find(d => d.toLowerCase().includes('libreoffice'))
-      if (!volName) throw new Error('未找到挂载卷')
-      await runCmd('cp', ['-R', '/Volumes/' + volName + '/LibreOffice.app', '/Applications/'])
-      await runCmd('hdiutil', ['detach', '/Volumes/' + volName])
-      fs.unlinkSync(dmgPath)
-      log('Office 转换已准备就绪！')
-      return true
-    } catch (err) {
-      lastErr = err
-      log('镜像 ' + (i+1) + ' 失败：' + err.message)
-      if (fs.existsSync(dmgPath)) { try { fs.unlinkSync(dmgPath) } catch(e){} }
+      log('正在下载 LibreOffice...')
+      await new Promise((resolve, reject) => {
+        const p = spawn('curl', ['-L','-o',tmp,'--progress-bar',url], { stdio: ['ignore','pipe','pipe'] })
+        let lastPercent = 0
+        p.stderr.on('data', d => {
+          const s = d.toString()
+          const m = s.match(/(\d+)%/)
+          if (m) {
+            const pct = parseInt(m[1])
+            if (pct !== lastPercent) {
+              lastPercent = pct
+              if (mainWindow) mainWindow.webContents.send('download-progress', { percent: pct, status: '下载中' })
+            }
+          }
+        })
+        p.on('close', code => code === 0 ? resolve() : reject(new Error('下载失败')))
+        p.on('error', reject)
+      })
+      if (IS_WIN) {
+        log('正在安装...')
+        await runCmd('msiexec', ['/i', tmp, '/quiet', '/norestart'])
+      } else {
+        log('正在安装...')
+        const mount = path.join(os.tmpdir(), 'lo_mount')
+        fs.mkdirSync(mount, { recursive: true })
+        await runCmd('hdiutil', ['attach', '-nobrowse', '-mountpoint', mount, tmp])
+        const appFile = fs.readdirSync(mount).find(f => f.endsWith('.app'))
+        if (appFile) fs.cpSync(path.join(mount, appFile), '/Applications/' + appFile, { recursive: true })
+        await runCmd('hdiutil', ['detach', mount])
+        fs.unlinkSync(tmp)
+      }
+      if (mainWindow) mainWindow.webContents.send('download-progress', { percent: 100, status: '完成' })
+      return { success: true }
+    } catch (e) {
+      log('镜像失败，尝试下一个...')
     }
   }
-  throw new Error('所有镜像均下载失败：' + (lastErr ? lastErr.message : '未知错误'))
+  throw new Error('所有镜像下载失败')
 })
 
 ipcMain.handle('convert', async (event, inputPath, targetExt, outputDir) => {
@@ -228,8 +213,6 @@ ipcMain.handle('convert', async (event, inputPath, targetExt, outputDir) => {
         const outs = fs.readdirSync(tmpDir).filter(f => !f.endsWith('.ncm'))
         if (outs.length === 0) throw new Error('ncmdump 未生成输出文件')
         const decPath = path.join(tmpDir, outs[0])
-        const decExt = outs[0].split('.').pop()
-        log(`解密完成（.${decExt}），正在转码...`)
         await runFfmpeg(decPath, outputPath, targetExt==='mp3'?['-b:a','320k']:[])
         fs.rmSync(tmpDir,{recursive:true,force:true})
       } else {
@@ -237,7 +220,6 @@ ipcMain.handle('convert', async (event, inputPath, targetExt, outputDir) => {
         const { data, ext: de } = decryptMusic(inputPath)
         const tmp = path.join(os.tmpdir(),`kstudio_${Date.now()}.${de}`)
         fs.writeFileSync(tmp, data)
-        log(`解密完成（.${de}），正在转码...`)
         await runFfmpeg(tmp, outputPath, targetExt==='mp3'?['-b:a','320k']:[])
         fs.unlinkSync(tmp)
       }
@@ -254,13 +236,13 @@ ipcMain.handle('convert', async (event, inputPath, targetExt, outputDir) => {
       return { output: outputPath }
     }
     if (['word','excel','ppt'].includes(type)) {
-      if (!hasOffice()) throw new Error('Office 转换未启用，请先在顶部点击下载 LibreOffice')
+      if (!hasOffice()) throw new Error('未安装 LibreOffice，Office 转换不可用')
+      const LIBREOFFICE = getLibreOffice()
       const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(),'kstudio_lo_'))
       const loProfile = path.join(os.tmpdir(), 'kstudio_lo_profile')
       fs.mkdirSync(loProfile, { recursive: true })
-      const loEnv = { ...process.env, SAL_USE_VCLPLUGIN: 'gen', HOME: os.homedir() }
+      const loEnv = { ...process.env, SAL_USE_VCLPLUGIN: 'gen' }
       await runCmd(LIBREOFFICE, ['--headless','--norestore',`-env:UserInstallation=file://${loProfile}`,'--convert-to',targetExt,'--outdir',tmpDir,inputPath], { env: loEnv })
-
       const files = fs.readdirSync(tmpDir)
       const outFile = files.find(f => f.endsWith('.'+targetExt)) || files[0]
       if (!outFile) throw new Error('LibreOffice 未生成输出')
@@ -284,7 +266,11 @@ ipcMain.handle('convert', async (event, inputPath, targetExt, outputDir) => {
           fs.copyFileSync(path.join(os.tmpdir(),imgs[0]), outputPath)
         } else {
           const zipPath = outputPath.replace(/\.[^.]+$/,'.zip')
-          await runCmd('zip', ['-j', zipPath, ...imgs.map(f => path.join(os.tmpdir(),f))])
+          if (IS_WIN) {
+            await runCmd('tar', ['-a','-c','-f',zipPath,...imgs.map(f=>path.join(os.tmpdir(),f))])
+          } else {
+            await runCmd('zip', ['-j', zipPath, ...imgs.map(f=>path.join(os.tmpdir(),f))])
+          }
           imgs.forEach(f => { try{fs.unlinkSync(path.join(os.tmpdir(),f))}catch(e){} })
           log(`完成（${imgs.length}页打包为ZIP）：${zipPath}`)
           return { output: zipPath }
@@ -294,15 +280,14 @@ ipcMain.handle('convert', async (event, inputPath, targetExt, outputDir) => {
       return { output: outputPath }
     }
     if (type === 'text') {
-      if (targetExt === 'html') {
-        const content = fs.readFileSync(inputPath, 'utf-8')
-        const escaped = content.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-        const html = `<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n<meta charset="UTF-8">\n<title>${baseName}</title>\n<style>body{font-family:-apple-system,sans-serif;max-width:800px;margin:40px auto;padding:0 20px;line-height:1.8}pre{white-space:pre-wrap;word-wrap:break-word}</style>\n</head>\n<body>\n<pre>${escaped}</pre>\n</body>\n</html>`
+      if (targetExt === 'html' && ext === 'txt') {
+        let content = fs.readFileSync(inputPath, 'utf-8')
+        const escaped = content.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>\n')
+        const html = `<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n<meta charset="UTF-8">\n<title>${baseName}</title>\n</head>\n<body>\n<p>${escaped}</p>\n</body>\n</html>`
         fs.writeFileSync(outputPath, html, 'utf-8')
-        log(`完成：${outputPath}`)
-        return { output: outputPath }
+      } else {
+        await runCmd(PANDOC, [inputPath, '-o', outputPath])
       }
-      await runCmd(PANDOC, [inputPath, '-o', outputPath])
       log(`完成：${outputPath}`)
       return { output: outputPath }
     }
@@ -313,61 +298,83 @@ ipcMain.handle('convert', async (event, inputPath, targetExt, outputDir) => {
   }
 })
 
-ipcMain.handle('ocr', async (event, inputPath) => {
+// ===== 图片批量转 PDF =====
+ipcMain.handle('images-to-pdf', async (event, imagePaths, outputPath) => {
+  log(`图片转PDF：${imagePaths.length} 张图片`)
+  try {
+    const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'kstudio_img2pdf_'))
+    const listFile = path.join(tmpDir, 'list.txt')
+    const listContent = imagePaths.map(p => `file '${p.replace(/'/g, "'\\''")}'`).join('\n')
+    fs.writeFileSync(listFile, listContent, 'utf-8')
+    await runCmd(FFMPEG, ['-y','-f','concat','-safe','0','-i',listFile,
+      '-vf','scale=1240:1754:force_original_aspect_ratio=decrease,pad=1240:1754:(ow-iw)/2:(oh-ih)/2:color=white',
+      outputPath])
+    fs.rmSync(tmpDir, { recursive: true, force: true })
+    log(`完成：${outputPath}`)
+    return { output: outputPath }
+  } catch (err) {
+    log('错误：' + err.message)
+    throw err
+  }
+})
+
+ipcMain.handle('ocr', async (event, inputPath, outputDir) => {
+  const ext = inputPath.split('.').pop().toLowerCase()
+  const imgExts = ['jpg','jpeg','png','webp','gif','bmp','tiff','avif']
+  if (!imgExts.includes(ext)) throw new Error('OCR 仅支持图片文件')
+  const baseName = path.basename(inputPath, path.extname(inputPath))
   log(`OCR识别：${path.basename(inputPath)}`)
   try {
     const tmpBase = path.join(os.tmpdir(), `kstudio_ocr_${Date.now()}`)
-    const preprocessed = tmpBase + '_pre.png'
-    await runCmd(FFMPEG, ['-y','-i',inputPath,'-vf','scale=iw*2:ih*2,format=gray,eq=contrast=1.3','-frames:v','1',preprocessed])
+    const preImg = tmpBase + '_pre.png'
+    await runFfmpeg(inputPath, preImg, ['-vf','scale=iw*2:ih*2,format=gray,eq=contrast=1.3','-frames:v','1'])
     const tessdata = path.join(process.resourcesPath || __dirname, 'bin', 'tessdata')
     const env = fs.existsSync(tessdata) ? { ...process.env, TESSDATA_PREFIX: tessdata } : process.env
-    await runCmd(TESSERACT, [preprocessed, tmpBase, '-l', 'chi_sim+eng', '--psm', '6', '--oem', '3', 'tsv'], { env })
+    await runCmd(TESSERACT, [preImg, tmpBase, '-l', 'chi_sim+eng', '--psm', '6', '--oem', '3', 'tsv'], { env })
     const tsvFile = tmpBase + '.tsv'
-    let words = []
-    let fullText = ''
+    const words = []
     if (fs.existsSync(tsvFile)) {
-      const lines = fs.readFileSync(tsvFile, 'utf-8').split('\n')
-      for (let i = 1; i < lines.length; i++) {
-        const cols = lines[i].split('\t')
-        if (cols.length >= 12 && cols[0] === '5') {
-          const text = cols[11]
-          if (text && text.trim()) {
-            words.push({
-              text,
-              left: Math.round(parseInt(cols[6]) / 2),
-              top: Math.round(parseInt(cols[7]) / 2),
-              width: Math.round(parseInt(cols[8]) / 2),
-              height: Math.round(parseInt(cols[9]) / 2)
-            })
-            fullText += text + ' '
-          }
+      const lines = fs.readFileSync(tsvFile, 'utf-8').split('\n').slice(1)
+      for (const line of lines) {
+        const parts = line.split('\t')
+        if (parts.length >= 12 && parts[11].trim()) {
+          words.push({
+            text: parts[11],
+            x: parseInt(parts[6]) / 2,
+            y: parseInt(parts[7]) / 2,
+            w: parseInt(parts[8]) / 2,
+            h: parseInt(parts[9]) / 2
+          })
         }
       }
       fs.unlinkSync(tsvFile)
     }
-    if (fs.existsSync(preprocessed)) fs.unlinkSync(preprocessed)
-    log('OCR完成，识别到 ' + words.length + ' 个词')
-    return { words, text: fullText.trim() }
+    fs.unlinkSync(preImg)
+    log(`识别完成，共 ${words.length} 个词`)
+    return { words, image: inputPath }
   } catch (err) { log('错误：'+err.message); throw err }
 })
 
 ipcMain.handle('zip-pack', async (event, filePaths, outputPath) => {
   log(`打包：${filePaths.length} 个文件`)
-  try {
+  if (IS_WIN) {
+    await runCmd('tar', ['-a','-c','-f',outputPath,...filePaths])
+  } else {
     await runCmd('zip', ['-j', outputPath, ...filePaths])
-    log(`完成：${outputPath}`)
-    return { output: outputPath }
-  } catch (err) { log('错误：'+err.message); throw err }
+  }
+  log(`完成：${outputPath}`)
+  return { output: outputPath }
 })
 
-ipcMain.handle('unzip', async (event, inputPath, outputDir) => {
-  const baseName = path.basename(inputPath, path.extname(inputPath))
-  const outDir = path.join(outputDir, baseName)
-  fs.mkdirSync(outDir, { recursive: true })
-  log(`解压：${path.basename(inputPath)} → ${baseName}/`)
-  try {
-    await runCmd('unzip', ['-o', inputPath, '-d', outDir])
-    log(`完成：${outDir}`)
-    return { output: outDir }
-  } catch (err) { log('错误：'+err.message); throw err }
+ipcMain.handle('unzip', async (event, zipPath, outputDir) => {
+  log(`解压：${path.basename(zipPath)}`)
+  const outFolder = path.join(outputDir, path.basename(zipPath, path.extname(zipPath)))
+  fs.mkdirSync(outFolder, { recursive: true })
+  if (IS_WIN) {
+    await runCmd('tar', ['-xf', zipPath, '-C', outFolder])
+  } else {
+    await runCmd('unzip', ['-o', zipPath, '-d', outFolder])
+  }
+  log(`完成：${outFolder}`)
+  return { output: outFolder }
 })

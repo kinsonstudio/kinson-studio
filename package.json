@@ -1,13 +1,12 @@
 {
   "name": "kinson-studio",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Kinson Studio 全能格式转换器",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "pack": "electron-builder --mac",
-    "pack:dmg": "electron-builder --mac dmg",
-    "pack:pkg": "electron-builder --mac pkg"
+    "pack:mac": "electron-builder --mac pkg",
+    "pack:win": "electron-builder --win nsis"
   },
   "author": "Kinson Studio",
   "license": "ISC",
@@ -29,18 +28,18 @@
       "hardenedRuntime": false,
       "gatekeeperAssess": false
     },
-    "pkg": {
-      "installLocation": "/Applications"
+    "pkg": { "installLocation": "/Applications" },
+    "win": {
+      "target": ["nsis"],
+      "icon": "resources/icon.ico"
     },
-    "extraResources": [
-      { "from": "resources/bin", "to": "bin" }
-    ],
-    "files": [
-      "main.js",
-      "preload.js",
-      "index.html",
-      "decrypter.js",
-      "node_modules/**/*"
-    ]
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "Kinson Studio"
+    },
+    "extraResources": [{ "from": "resources/bin", "to": "bin" }],
+    "files": ["main.js","preload.js","index.html","decrypter.js","node_modules/**/*"]
   }
 }

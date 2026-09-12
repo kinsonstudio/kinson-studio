@@ -5,12 +5,13 @@ contextBridge.exposeInMainWorld('api', {
   openFiles: () => ipcRenderer.invoke('openFiles'),
   chooseOutputDir: () => ipcRenderer.invoke('chooseOutputDir'),
   getDefaultOutputDir: () => ipcRenderer.invoke('getDefaultOutputDir'),
-  convert: (inputPath, targetExt, outputDir) => ipcRenderer.invoke('convert', inputPath, targetExt, outputDir),
-  ocr: (inputPath) => ipcRenderer.invoke('ocr', inputPath),
-  zipPack: (filePaths, outputPath) => ipcRenderer.invoke('zip-pack', filePaths, outputPath),
-  unzip: (inputPath, outputDir) => ipcRenderer.invoke('unzip', inputPath, outputDir),
+  convert: (input, target, outDir) => ipcRenderer.invoke('convert', input, target, outDir),
+  imagesToPdf: (images, output) => ipcRenderer.invoke('images-to-pdf', images, output),
+  ocr: (input, outDir) => ipcRenderer.invoke('ocr', input, outDir),
+  zipPack: (files, output) => ipcRenderer.invoke('zip-pack', files, output),
+  unzip: (zip, outDir) => ipcRenderer.invoke('unzip', zip, outDir),
   checkOffice: () => ipcRenderer.invoke('check-office'),
   downloadOffice: () => ipcRenderer.invoke('download-office'),
-  onDownloadProgress: (callback) => ipcRenderer.on('download-progress', (event, p) => callback(p)),
-  onLog: (callback) => ipcRenderer.on('log', (event, msg) => callback(msg))
+  onLog: (cb) => ipcRenderer.on('log', (e, msg) => cb(msg)),
+  onDownloadProgress: (cb) => ipcRenderer.on('download-progress', (e, data) => cb(data))
 })
